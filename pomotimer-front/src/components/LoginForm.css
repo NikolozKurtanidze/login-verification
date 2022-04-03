@@ -1,0 +1,26 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: monserrat, sans-serif;
+}
+
+
+.header{
+    user-select: none;
+}
+
+.main{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+    flex-direction: column;
+    row-gap: 3vh;
+    justify-content: center;
+    align-items: center;
+    max-width: 415px;
+    border-radius: 1rem;
+    padding: 2%;
+    background-color: #2C394B;
+}
