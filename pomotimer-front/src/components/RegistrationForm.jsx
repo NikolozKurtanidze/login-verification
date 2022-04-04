@@ -16,7 +16,20 @@ function RegistrationForm(){
     const [errorVerificationCode, setErrorVerificationCode] = useState(false);
     const [loading, setLoading] = useState(false);
     const [openBackdrop, setOpenBackdrop] = useState(false);
+    const [backgroundStyle, setBackgroundStyle] = useState({backgroundColor:"#334756"});
+    const [resendDisable, setResendDisable] = useState(false);
     const navigate = useNavigate();
+
+    const handleResendClick = () => {
+        setResendDisable(true);
+        setBackgroundStyle({backgroundColor:"#082032"})
+        setTimeout(() => {
+            setResendDisable(false);
+            setBackgroundStyle({backgroundColor:"#334756"})
+        }, 10000);
+        const username = document.getElementById('outlined-username').value;
+        UserService.sendVerificationCode(username);
+    }
     
 
     const handleVerificationChange = async () => {
@@ -103,13 +116,16 @@ function RegistrationForm(){
                 </ThemeProvider>
                 <ThemeProvider theme={mainTheme}>
                     <Backdrop
-                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                        open={openBackdrop}
-                        >
-                        <div className='main'>
-                            <h2 className="header" style={{color:"black"}}>Enter verification code</h2>
-                            <TextField onChange={handleVerificationChange} error={errorVerificationCode} helperText={errorVerificationCode ? "Invalid Verification Code" : null} id='outlined-verification' label='Verification Code' required color='primary'/>
-                        </div>
+                            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                            open={openBackdrop}
+                            >
+                            <div className='main'>
+                                <h2 className="header" style={{color:"black"}}>Enter verification code</h2>
+                                <div style={{display:"flex", width:"fit-content", height:"fit-content"}}>
+                                    <TextField onChange={handleVerificationChange} error={errorVerificationCode} helperText={errorVerificationCode ? "Invalid Verification Code" : null} id='outlined-verification' label='Verification Code' required color='primary'/>
+                                    <Button disabled={resendDisable} onClick={handleResendClick} sx={[{borderRadius:"5vh", borderWidth: "0.01px", borderColor:"black", marginLeft:"5%", color:"black" }, backgroundStyle]} ><img src={require('../assets/resend.png')} alt="image not found"/></Button>
+                                </div>
+                            </div>
                     </Backdrop>
                 </ThemeProvider>
             </div>

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ThemeProvider } from '@emotion/react';
-import { Button, Fade, TextField } from '@mui/material';
+import { Button, Fade, TextField, Backdrop } from '@mui/material';
 import LinearProgress from '@mui/material/LinearProgress';
 import mainTheme from '../Themes/mainTheme';
 import FadeIn from 'react-fade-in/lib/FadeIn';
@@ -13,8 +13,36 @@ function LoginForm(){
     const [loading, setLoading] = useState(false);
     const [errorUsername, toggleErrorUsername] = useState(false);
     const [errorPassword, toggleErrorPassword] = useState(false);
+    const [openBackdrop, setOpenBackdrop] = useState(false);
+    const [errorVerificationCode, setErrorVerificationCode] = useState(false);
+    const [resendDisabled, setResendDisable] = useState(false);
+    const [backgroundStyle, setBackgroundStyle] = useState({backgroundColor:"#334756"});
 
     let navigate = useNavigate();
+
+    const handleVerificationChange = async () => {        const username = document.getElementById('outlined-username').value;
+        const code = document.getElementById('outlined-verification').value;
+        if(code.length != 10) {
+            setErrorVerificationCode(true);
+            return;
+        }
+        let result;
+        await UserService.checkVerificationCode(username, code).then((response) => result = response.data).catch((error) => console.log(error));
+        if(result)
+            navigate("/home");
+        else setErrorVerificationCode(true);
+    }
+
+    const handleResendClick = () => {
+        setResendDisable(true);
+        setBackgroundStyle({backgroundColor:"#082032"})
+        setTimeout(() => {
+            setResendDisable(false);
+            setBackgroundStyle({backgroundColor:"#334756"})
+        }, 10000);
+        const username = document.getElementById('outlined-username').value;
+        UserService.sendVerificationCode(username);
+    }
 
     const userLoggedIn = async () => {
         const username = document.getElementById('outlined-username').value
@@ -30,15 +58,23 @@ function LoginForm(){
         if(password === '' || username === '')
             return;
         setLoading(true);
-        await UserService.loginUser(username, password).then((response) => {
+        await UserService.loginUser(username, password).then(async (response) => {
             if(response.data){
                 localStorage.setItem('auth', username);
                 setLoading(false);
                 navigate('/home');
             } if(!response.data){
-                toggleErrorPassword(true);
-                toggleErrorUsername(true);
-                setLoading(false);
+                await UserService.checkUser(username, password).then(async (response) => {
+                    if(response.data){
+                        await UserService.sendVerificationCode(username);
+                        setOpenBackdrop(true);
+                        setLoading(false);
+                    }else{
+                        toggleErrorPassword(true);
+                        toggleErrorUsername(true);
+                        setLoading(false);
+                    }
+                });
             }         
         }).catch(error => {
             setLoading(false);
@@ -78,6 +114,20 @@ function LoginForm(){
                             <LinearProgress color='primary' sx={{width:"100%"}}/>
                         </Fade>
                     </ThemeProvider>
+                    <ThemeProvider theme={mainTheme}>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={openBackdrop}
+                        >
+                        <div className='main'>
+                            <h2 className="header" style={{color:"black"}}>Enter verification code</h2>
+                            <div style={{display:"flex", width:"fit-content", height:"fit-content"}}>
+                                <TextField onChange={handleVerificationChange} error={errorVerificationCode} helperText={errorVerificationCode ? "Invalid Verification Code" : null} id='outlined-verification' label='Verification Code' required color='primary'/>
+                                <Button disabled={resendDisabled} onClick={handleResendClick} sx={[{borderRadius:"5vh", borderWidth: "0.01px", borderColor:"black", marginLeft:"5%", color:"black" }, backgroundStyle]} ><img src={require('../assets/resend.png')} alt="image not found"/></Button>
+                            </div>
+                        </div>
+                    </Backdrop>
+                </ThemeProvider>
                 </div>
             </FadeIn>
         </div>

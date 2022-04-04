@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const CheckServerURL = "http://10.1.66.19:8080/checkServer";
+const CheckUserURL = "http://10.1.66.19:8080/checkUser";
 const RegisterURL = "http://10.1.66.19:8080/registerUser";
 const CheckCodeURL = "http://10.1.66.19:8080/checkCode";
 const CheckInfoURL = "http://10.1.66.19:8080/checkInfo";
@@ -16,6 +17,17 @@ class UserService{
     //Checks If server is alive
     async checkServer(){
         return await axios.get(CheckServerURL);
+    }
+
+    async checkUser(username, password){
+        return await axios.get(CheckUserURL,
+            {
+                params:{
+                    username: username,
+                    password: password
+                }
+            }
+        );
     }
 
     //Assumes user info is already checked!

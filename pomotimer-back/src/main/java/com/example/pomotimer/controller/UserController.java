@@ -21,6 +21,11 @@ public class UserController {
         return true;
     }
 
+    @GetMapping("/checkUser")
+    boolean checkUser(@RequestParam(required = true) String username, @RequestParam(required = true) String password){
+        return userService.checkUser(username, password);
+    }
+
     @PutMapping("/registerUser")
     boolean registerUser(@RequestParam(required = true) String username, @RequestParam(required = true) String password, @RequestParam(required = true) String email){
         if(!userService.checkUsername(username, email)) return false;

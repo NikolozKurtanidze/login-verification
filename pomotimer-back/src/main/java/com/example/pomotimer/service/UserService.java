@@ -26,7 +26,9 @@ public class UserService {
     public boolean checkUser(String username, String password){
         return userRepository.findAll()
                 .stream()
-                .anyMatch(x -> x.getUsername().equals(username) && x.getPassword().equals(password));
+                .anyMatch(x -> x.getUsername().equals(username)
+                        && x.getPassword().equals(password)
+                        && !x.getEnabled());
     }
 
     public User getUser(String username){
