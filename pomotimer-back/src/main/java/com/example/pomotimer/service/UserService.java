@@ -144,4 +144,15 @@ public class UserService {
                 .forEach(x -> userRepository.clearMonth(x.getId()));
     }
 
+    public boolean checkEmail(String email) {
+        return userRepository.findAll()
+                .stream()
+                .noneMatch(x -> x.getEmail().equals(email));
+    }
+
+    public boolean checkUsername(String username){
+        return userRepository.findAll()
+                .stream()
+                .noneMatch(x -> x.getUsername().equals(username));
+    }
 }

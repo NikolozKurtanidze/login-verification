@@ -4,7 +4,8 @@ const CheckServerURL = "http://10.1.66.19:8080/checkServer";
 const CheckUserURL = "http://10.1.66.19:8080/checkUser";
 const RegisterURL = "http://10.1.66.19:8080/registerUser";
 const CheckCodeURL = "http://10.1.66.19:8080/checkCode";
-const CheckInfoURL = "http://10.1.66.19:8080/checkInfo";
+const CheckUsernameURL = "http://10.1.66.19:8080/checkUsername";
+const CheckEmailURL = "http://10.1.66.19:8080/checkEmail";
 const LoginUserURL = "http://10.1.66.19:8080/loginUser";
 const AddPomoURL = "http://10.1.66.19:8080/addPomo";
 const GetUserURL = "http://10.1.66.19:8080/getUserInfo";
@@ -19,6 +20,31 @@ class UserService{
         return await axios.get(CheckServerURL);
     }
 
+
+    //Checks if username is taken or not
+    async checkUsername(username){
+        return await axios.get(CheckUsernameURL, 
+            {
+                params:{
+                    username: username
+                }
+            }
+        );
+    }
+
+    //Checks if email is taken or not
+    async checkEmail(email){
+        return await axios.get(CheckEmailURL, 
+            {
+                params:{
+                    email: email
+                }
+            }
+            );
+    }
+
+
+    //Checks if username and password are valid
     async checkUser(username, password){
         return await axios.get(CheckUserURL,
             {
@@ -53,16 +79,7 @@ class UserService{
             });
     }
 
-    //Checks if username and email are valid.
-    async checkUsername(username, email){
-        return await axios.get(CheckInfoURL,
-        {
-            params: {
-                username: username,
-                email: email
-            }
-        });
-    }
+
 
     //Checks if user is verified and username and password are valid.
     async loginUser(username, password){

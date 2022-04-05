@@ -1,0 +1,13 @@
+.main-backdrop{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    flex-direction: column;
+    row-gap: 3vh;
+    justify-content: center;
+    align-items: center;
+    max-width: 415px;
+    border-radius: 1rem;
+    padding: 2%;
+    background-color: #2C394B;
+}

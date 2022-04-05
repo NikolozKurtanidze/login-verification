@@ -10,7 +10,7 @@ import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin()
 public class UserController {
 
     @Autowired
@@ -19,6 +19,16 @@ public class UserController {
     @GetMapping("/checkServer")
     boolean checkServer(){
         return true;
+    }
+
+    @GetMapping("/checkEmail")
+    boolean checkEmail(@RequestParam(required = true) String email){
+        return userService.checkEmail(email);
+    }
+
+    @GetMapping("/checkUsername")
+    boolean checkUsername(@RequestParam(required = true) String username){
+        return userService.checkUsername(username);
     }
 
     @GetMapping("/checkUser")

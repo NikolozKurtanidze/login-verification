@@ -47,15 +47,15 @@ function LoginForm(){
     const userLoggedIn = async () => {
         const username = document.getElementById('outlined-username').value
         const password = document.getElementById('outlined-password').value
-        if(username === '')
+        if(username === '' || username.length < 5)
             toggleErrorUsername(true);
         else
             toggleErrorUsername(false);
-        if(password === '')
+        if(password === '' || password.length < 7)
             toggleErrorPassword(true);
         else
             toggleErrorPassword(false);
-        if(password === '' || username === '')
+        if(password === '' || username === '' || username.length < 5 || password.length < 7) 
             return;
         setLoading(true);
         await UserService.loginUser(username, password).then(async (response) => {
@@ -66,7 +66,7 @@ function LoginForm(){
             } if(!response.data){
                 await UserService.checkUser(username, password).then(async (response) => {
                     if(response.data){
-                        await UserService.sendVerificationCode(username);
+                        UserService.sendVerificationCode(username);
                         setOpenBackdrop(true);
                         setLoading(false);
                     }else{
