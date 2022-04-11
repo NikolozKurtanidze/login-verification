@@ -88,9 +88,6 @@ public class UserService {
                 .builder()
                 .username(username)
                 .password(password)
-                .pomosDay(0)
-                .pomosWeek(0)
-                .pomosMonth(0)
                 .email(email)
                 .verificationCode(verificationCode)
                 .enabled(false)
@@ -107,8 +104,8 @@ public class UserService {
     public void sendVerificationEmail(String username) throws MessagingException, UnsupportedEncodingException {
         User user = this.getUser(username);
         String toAddress = user.getEmail();
-        String fromAddress = "pomotimernoreply@gmail.com";
-        String senderName = "pomotimerNOREPLY";
+        String fromAddress = "verificationNOREPLY@gmail.com";
+        String senderName = "Verification";
         String subject = "Email verification";
         String content = "Your verification code is: " + user.getVerificationCode();
 
@@ -123,26 +120,6 @@ public class UserService {
         mailSender.send(message);
     }
 
-    public void addPomo(Long id){
-        userRepository.incrDay(id);
-        userRepository.incrWeek(id);
-        userRepository.incrMonth(id);
-    }
-
-    public void clearDay(){
-        userRepository.findAll()
-                .forEach(x -> userRepository.clearDay(x.getId()));
-    }
-
-    public void clearWeek(){
-        userRepository.findAll()
-                .forEach(x -> userRepository.clearWeek(x.getId()));
-    }
-
-    public void clearMonth(){
-        userRepository.findAll()
-                .forEach(x -> userRepository.clearMonth(x.getId()));
-    }
 
     public boolean checkEmail(String email) {
         return userRepository.findAll()

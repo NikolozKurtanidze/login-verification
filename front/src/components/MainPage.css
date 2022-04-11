@@ -1,0 +1,20 @@
+.main-card{
+    display: flex;
+    width: fit-content;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin:auto;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+.main-timer{
+    font-size: 24vh;
+    user-select: none;
+}
+
+.main-header{
+    user-select: none;
+    color: red;
+}

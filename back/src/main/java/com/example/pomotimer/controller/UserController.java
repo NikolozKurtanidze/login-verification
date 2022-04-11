@@ -57,11 +57,6 @@ public class UserController {
         return userService.loginUser(username, password);
     }
 
-    @PostMapping("/addPomo")
-    void addPomo(@RequestParam(required = true) Long id){
-        userService.addPomo(id);
-    }
-
     @GetMapping("/getUserInfo")
     User getUserInfo(@RequestParam(required = true) String username){
         return userService.getUser(username);

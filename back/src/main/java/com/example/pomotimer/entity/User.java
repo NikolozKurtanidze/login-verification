@@ -25,15 +25,6 @@ public class User {
     @Column(name = "pwd")
     private String password;
 
-    @Column(name = "pomos_week")
-    private Integer pomosWeek;
-
-    @Column(name = "pomos_day")
-    private Integer pomosDay;
-
-    @Column(name = "pomos_month")
-    private Integer pomosMonth;
-
     @Column(name = "email")
     private String email;
 
